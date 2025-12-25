@@ -48,7 +48,7 @@ class _VarInt {
     for (var i = 0; i < maxVarIntBytes && index + i < data.length; i++) {
       if ((data[index + i] & 0x80) == 0) return i + 1;
     }
-    throw ArgumentError('VarInt is too long or incomplete');
+    throw ArgumentError('VarInt is too long or incomplete.');
   }
 }
 
@@ -56,7 +56,17 @@ class MinecraftServerStatus {
   final String host;
   final int port;
 
-  MinecraftServerStatus({required this.host, this.port = 25565});
+  MinecraftServerStatus({required this.host, this.port = 25565}) {
+    if (host.isEmpty) {
+      throw ArgumentError.value(host, 'host', 'host cannot be empty.');
+    }
+    if (host.codeUnits.length > 255) {
+      throw ArgumentError.value(host, 'host', 'host is too long.');
+    }
+    if (port < 1 || port > 65535) {
+      throw ArgumentError.value(port, 'port', 'port must between 1 to 65535');
+    }
+  }
 
   List<int> _getHostBytes(String host) => [
     ..._VarInt.encode(ascii.encode(host).length),
