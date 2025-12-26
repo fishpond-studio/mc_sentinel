@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
-
-DateTime now = DateTime.now();
-DateTime date = DateTime(now.month, now.day);
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -13,10 +9,19 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   final List<Map<String, dynamic>> items = []; // 存储数据
+  late DateTime date; // 日期变量
 
   @override
   void initState() {
     super.initState();
+    _updateDate(); // 初始化日期
+  }
+
+  // 更新日期方法
+  void _updateDate() {
+    setState(() {
+      date = DateTime.now(); // 获取当前日期时间
+    });
   }
 
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class _HomepageState extends State<Homepage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.cached)),
+                IconButton(onPressed: _updateDate, icon: Icon(Icons.cached)),
                 SizedBox(width: 8),
                 //日期显示
                 Text(
@@ -45,26 +50,29 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: (items.length / 2).ceil(),
-        itemBuilder: (context, rowIndex) {
-          int firstIndex = rowIndex * 2;
-          int secondIndex = firstIndex + 1;
+      body: Container(
+        color: Colors.blue[50],
+        child: ListView.builder(
+          itemCount: (items.length / 2).ceil(),
+          itemBuilder: (context, rowIndex) {
+            int firstIndex = rowIndex * 2;
+            int secondIndex = firstIndex + 1;
 
-          return Row(
-            children: [
-              Expanded(
-                child: _buildItem(items[firstIndex]["name"], firstIndex),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: secondIndex < items.length
-                    ? _buildItem(items[secondIndex]["name"], secondIndex)
-                    : const SizedBox(),
-              ),
-            ],
-          );
-        },
+            return Row(
+              children: [
+                Expanded(
+                  child: _buildItem(items[firstIndex]["name"], firstIndex),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: secondIndex < items.length
+                      ? _buildItem(items[secondIndex]["name"], secondIndex)
+                      : const SizedBox(),
+                ),
+              ],
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddDialog,
@@ -164,14 +172,26 @@ class _HomepageState extends State<Homepage> {
       height: 250,
       child: Stack(
         children: [
-          // 毛玻璃效果背景
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20), //模糊强度
+          Positioned.fill(
             child: Container(
+              width: double.infinity,
+              height: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.blue[100]?.withOpacity(0.5), //透明度，增强毛玻璃效果
+                color: Colors.blue[100]?.withOpacity(0.95), //半透明替代毛玻璃背景
                 borderRadius: BorderRadius.circular(8),
-                // 去掉边框
+                border: Border.all(
+                  color: Colors.blue[200]!.withOpacity(0.95),
+                  width: 1.5,
+                ), //边框效果
+                boxShadow: [
+                  BoxShadow(
+                    color:
+                        Colors.blue[200]?.withOpacity(0.8) ??
+                        Colors.transparent,
+                    blurRadius: 8,
+                    offset: Offset(0, 5),
+                  ),
+                ], //阴影效果
               ),
             ),
           ),
@@ -180,7 +200,7 @@ class _HomepageState extends State<Homepage> {
             padding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 10,
-            ), // 增加内边距
+            ), // 内边距
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -234,9 +254,7 @@ class _HomepageState extends State<Homepage> {
                             horizontal: 5,
                           ), // IP栏左右间隔
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(
-                              0.7,
-                            ), // 降低透明度，与整体效果协调
+                            color: Colors.white.withOpacity(0.7), // 透明度
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Center(
