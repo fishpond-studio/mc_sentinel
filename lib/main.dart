@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/homepage.dart';
-import 'pages/picture_change.dart';
+import 'pages/routes_pages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,8 +18,7 @@ class MyApp extends StatelessWidget {
           seedColor: const Color.fromARGB(255, 58, 158, 183),
         ),
       ),
-      home: const Homepage(),
-      routes: {'/picture_change': (context) => const PictureChange()},
+      home: const RoutesPages(),
     );
   }
 }
