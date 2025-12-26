@@ -68,30 +68,19 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Container(
         color: Colors.blue[50],
-        child: ListView.builder(
-          itemCount: (items.length / 2).ceil(),
-          itemBuilder: (context, rowIndex) {
-            int firstIndex = rowIndex * 2;
-            int secondIndex = firstIndex + 1;
-
-            return Row(
-              children: [
-                Expanded(
-                  child: ServerCard(
-                    item: items[firstIndex],
-                    onDelete: () => _removeItem(firstIndex),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: secondIndex < items.length
-                      ? ServerCard(
-                          item: items[secondIndex],
-                          onDelete: () => _removeItem(secondIndex),
-                        )
-                      : const SizedBox(),
-                ),
-              ],
+        child: GridView.builder(
+          padding: const EdgeInsets.all(12),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // 每行两列
+            crossAxisSpacing: 16, // 列间距
+            mainAxisSpacing: 16, // 行间距
+            childAspectRatio: 0.618, // 宽高比，根据 ServerCard 调整
+          ),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return ServerCard(
+              item: items[index],
+              onDelete: () => _removeItem(index),
             );
           },
         ),

@@ -9,7 +9,6 @@ class ServerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(12), //外层间隔
       height: 250,
       child: Stack(
         children: [
@@ -19,18 +18,19 @@ class ServerCard extends StatelessWidget {
               height: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.blue[100]?.withValues(alpha: 0.95), //半透明替代毛玻璃背景
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: Colors.blue[200]!.withValues(alpha: 0.95),
+                  color: Colors.blue[200]!.withValues(alpha: 0.5),
                   width: 1.5,
-                ), //边框效果
+                ),
+                //边框效果
                 boxShadow: [
                   BoxShadow(
                     color:
                         Colors.blue[200]?.withValues(alpha: 0.8) ??
                         Colors.transparent,
                     blurRadius: 8,
-                    offset: Offset(0, 5),
+                    offset: Offset(2, 5),
                   ),
                 ], //阴影效果
               ),
@@ -39,64 +39,75 @@ class ServerCard extends StatelessWidget {
           // 卡片内容
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 10,
+              horizontal: 15,
+              vertical: 15,
             ), // 内边距
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //信息显示
                 Expanded(
-                  flex: 9,
+                  flex: 13,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.6), //低明度
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10), // 增加底部栏上方间隔
+                const SizedBox(height: 9), // 增加底部栏上方间隔
                 //组件底部显示状态栏
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       //运行状态
                       Expanded(
-                        flex: 1,
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 5), // 状态图标右侧间隔
-                          decoration: BoxDecoration(
-                            color: item['running']
-                                ? Colors.green[200]?.withValues(alpha: 0.9)
-                                : const Color.fromARGB(
-                                    255,
-                                    247,
-                                    115,
-                                    106,
-                                  ).withValues(alpha: 0.9),
-                            borderRadius: BorderRadius.circular(11),
-                          ),
-                          child: Icon(
-                            item['running']
-                                ? Icons.power_settings_new
-                                : Icons.close,
-                            color: Colors.white,
-                            size: 17,
+                        flex: 2,
+                        child: SizedBox.expand(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(EdgeInsets.zero),
+                              alignment: Alignment.center,
+
+                              backgroundColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    states,
+                                  ) {
+                                    // 按下时
+                                    if (states.contains(WidgetState.pressed)) {
+                                      return Colors.red[400]?.withValues(
+                                        alpha: 0.9,
+                                      );
+                                    }
+                                    // 默认
+                                    return Colors.red[200]?.withValues(
+                                      alpha: 0.9,
+                                    );
+                                  }),
+                            ),
+                            onPressed: () {},
+                            child: Icon(
+                              item['running']
+                                  ? Icons.power_settings_new
+                                  : Icons.close,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ),
                       //IP地址
                       Expanded(
-                        flex: 4,
+                        flex: 5,
                         child: Container(
                           margin: const EdgeInsets.symmetric(
                             horizontal: 5,
                           ), // IP栏左右间隔
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.7), // 透明度
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           child: Center(
                             child: Text(
@@ -111,15 +122,28 @@ class ServerCard extends StatelessWidget {
                       ),
                       //删除按钮
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: SizedBox.expand(
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              backgroundColor: Colors.red[100]?.withValues(
-                                alpha: 0.9,
-                              ), // 半透明浅红色背景
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(EdgeInsets.zero),
                               alignment: Alignment.center,
+
+                              backgroundColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    states,
+                                  ) {
+                                    // 按下时
+                                    if (states.contains(WidgetState.pressed)) {
+                                      return Colors.red[400]?.withValues(
+                                        alpha: 0.9,
+                                      );
+                                    }
+                                    // 默认
+                                    return Colors.red[200]?.withValues(
+                                      alpha: 0.9,
+                                    );
+                                  }),
                             ),
                             onPressed: () {
                               showDialog(
@@ -138,14 +162,13 @@ class ServerCard extends StatelessWidget {
                                       ElevatedButton(
                                         onPressed: onDelete,
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                            255,
-                                            241,
-                                            148,
-                                            142,
-                                          ).withValues(alpha: 0.9),
+                                          backgroundColor: Colors.red[400]
+                                              ?.withValues(alpha: 0.9),
                                         ),
-                                        child: const Text("删除"),
+                                        child: const Text(
+                                          "删除",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   );
@@ -155,7 +178,7 @@ class ServerCard extends StatelessWidget {
                             child: const Icon(
                               Icons.delete,
                               color: Colors.white,
-                              size: 15,
+                              size: 20,
                             ),
                           ),
                         ),
