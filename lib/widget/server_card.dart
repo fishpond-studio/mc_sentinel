@@ -22,7 +22,7 @@ class ServerCard extends StatelessWidget {
                 ).primaryColor.withOpacity(0.4), //半透明替代毛玻璃背景
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: Theme.of(context).primaryColor.withOpacity(0.5),
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
                   width: 1.5,
                 ),
                 //边框效果
@@ -55,7 +55,7 @@ class ServerCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 9), // 增加底部栏上方间隔
+                const SizedBox(height: 9), // 底部栏上方间隔
                 //组件底部显示状态栏
                 Expanded(
                   flex: 2,
@@ -119,11 +119,12 @@ class ServerCard extends StatelessWidget {
                         child: Container(
                           //内边距
                           padding: EdgeInsets.symmetric(
-                            horizontal: 7,
+                            horizontal: 5,
                             vertical: 0,
                           ),
                           margin: const EdgeInsets.symmetric(
-                            horizontal: 5,
+                            horizontal: 8,
+                            vertical: 0,
                           ), // IP栏左右间隔
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.7), // 透明度
@@ -149,11 +150,14 @@ class ServerCard extends StatelessWidget {
                           ),
                           child: Center(
                             child: FittedBox(
+                              alignment: Alignment.center,
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 item['address'],
+                                overflow: TextOverflow.visible,
+                                softWrap: false,
                                 style: TextStyle(
-                                  fontSize: 20, // 设置一个较大的默认值，让FittedBox调整
+                                  fontSize: 200, // 设置一个较大的默认值，让FittedBox调整
                                   color: Theme.of(context).colorScheme.primary
                                       .withAlpha(200)
                                       .withBlue(100)

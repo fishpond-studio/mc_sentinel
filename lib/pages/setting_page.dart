@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../theme/theme_provider.dart';
 
 class PictureChange extends StatefulWidget {
   const PictureChange({super.key});
@@ -70,10 +72,18 @@ class _PictureChangeState extends State<PictureChange> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                children: const [
+                                children: [
                                   Icon(Icons.brightness_6, size: 20),
                                   SizedBox(width: 8),
-                                  Text('日间/夜晚模式'),
+                                  Text(
+                                    '日间/夜晚模式',
+                                    style: TextStyle(
+                                      fontFamily: 'FMinecraft',
+                                      color: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.color,
+                                    ),
+                                  ),
                                 ],
                               ),
                               Transform.scale(
@@ -123,14 +133,22 @@ class _PictureChangeState extends State<PictureChange> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.image,
                                       size: 20,
                                       color: Colors.black,
                                     ),
                                     SizedBox(width: 8),
-                                    Text('更换背景图片', style: TextStyle()),
+                                    Text(
+                                      '更换背景图片',
+                                      style: TextStyle(
+                                        fontFamily: 'FMinecraft',
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 const Icon(
@@ -140,6 +158,74 @@ class _PictureChangeState extends State<PictureChange> {
                                 ),
                               ],
                             ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    //分隔线
+                    Divider(
+                      color: Colors.grey[800],
+                      thickness: 0.3,
+                      height: 0.3, //消除空隙
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    //更换主题颜色
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.1),
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.trip_origin, size: 20),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '更换主题颜色',
+                                    style: TextStyle(
+                                      fontFamily: 'FMinecraft',
+                                      color: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.color,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Transform.scale(
+                                scale: 0.8, // 开关大小
+                                child: Consumer<ThemeProvider>(
+                                  builder: (context, themeProvider, child) {
+                                    return DropdownMenu(
+                                      initialSelection:
+                                          themeProvider.currentColorName,
+                                      onSelected: (value) {
+                                        if (value != null) {
+                                          themeProvider.changeThemeColor(value);
+                                        }
+                                      },
+                                      dropdownMenuEntries: themeProvider
+                                          .availableColors
+                                          .map(
+                                            (color) => DropdownMenuEntry(
+                                              value: color,
+                                              label: color,
+                                            ),
+                                          )
+                                          .toList(),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

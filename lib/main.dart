@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
 import 'pages/routes_pages.dart';
+import 'theme/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,24 +19,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Is MC FK Running?',
-      theme: ThemeData(
-        fontFamily: 'FMinecraft',
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(210, 13, 34, 32),
-          primary: Color.fromARGB(133, 121, 155, 93),
-        ),
-        useMaterial3: true,
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(
-            color: Theme.of(context).textTheme.bodyMedium?.color,
-            fontFamily: 'FMinecraft',
-          ),
-        ),
+    return ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Is MC FK Running?',
+            theme: themeProvider.getTheme(), // 应用主题
+            home: const RoutesPages(),
+          );
+        },
       ),
-      home: const RoutesPages(),
     );
   }
 }
