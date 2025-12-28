@@ -16,6 +16,7 @@ class ThemeProvider with ChangeNotifier {
     'Purple': const Color.fromARGB(210, 156, 39, 176),
     'Pink': const Color.fromARGB(210, 233, 30, 99),
     'Cyan': const Color.fromARGB(210, 0, 188, 212),
+    'Grey': const Color.fromARGB(210, 96, 125, 139),
   };
 
   String _currentColorName = 'Blue';

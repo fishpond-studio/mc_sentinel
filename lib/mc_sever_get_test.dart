@@ -1,7 +1,6 @@
 import 'minecraft_server_status.dart';
 
-// for test
 void main() async {
-  var server = MinecraftServerStatus(host: '192.168.0.107', port: 64519);
+  var server = MinecraftServerStatus(host: 'play7.furcraft.top', port: 25565);
   print(await server.getServerStatus());
 }
