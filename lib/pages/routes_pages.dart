@@ -28,16 +28,16 @@ class _RoutesPagesState extends State<RoutesPages> {
             _currentIndex = index;
           });
         },
-        children: _pages,
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
         ), // 使用弹性滚动物理效果，确保总是可以滚动
-        scrollDirection: Axis.horizontal, // 确保水平滚动
+        scrollDirection: Axis.horizontal,
+        children: _pages, // 确保水平滚动
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(
           context,
-        ).colorScheme.primary.withOpacity(0.15),
+        ).colorScheme.primary.withValues(alpha: 0.15),
         currentIndex: _currentIndex,
         onTap: (int index) {
           _pageController.animateToPage(
@@ -57,10 +57,10 @@ class _RoutesPagesState extends State<RoutesPages> {
             label: 'Settings',
           ),
         ],
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(
+        selectedItemColor: Theme.of(
           context,
-        ).colorScheme.primary.withOpacity(0.3),
+        ).colorScheme.primary.withValues(alpha: 0.9),
+        unselectedItemColor: Theme.of(context).colorScheme.primary,
         showSelectedLabels: true,
         showUnselectedLabels: true,
       ),

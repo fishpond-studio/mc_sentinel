@@ -47,30 +47,41 @@ Future<Map<String, String>?> showAddServerDialog(BuildContext context) {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, null), // 取消
-            child: const Text("取消", style: TextStyle()),
+            child: const Text("取消", style: TextStyle(color: Colors.black)),
           ),
           ElevatedButton(
             onPressed: () {
-              if (inputName.trim().isEmpty) {
-                inputName = "Sever";
-              }
-              if (inputPort.trim().isEmpty) {
-                inputPort = "25565";
-              }
-              if (inputAddress.trim().isEmpty) {
+              final name = inputName.trim().isEmpty
+                  ? 'Server'
+                  : inputName.trim();
+              final address = inputAddress.trim();
+              final portStr = inputPort.trim().isEmpty
+                  ? '25565'
+                  : inputPort.trim();
+              final port = int.tryParse(portStr);
+
+              if (address.isEmpty) {
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(const SnackBar(content: Text("请输入地址")));
+                ).showSnackBar(const SnackBar(content: Text('请输入地址')));
+                return;
               }
-              if (inputAddress.trim().isNotEmpty) {
-                Navigator.pop(context, {
-                  'name': inputName.trim(),
-                  'address': inputAddress.trim(),
-                  'port': inputPort.trim(),
-                });
+
+              if (port == null || port < 1 || port > 65535) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('端口号必须为1-65535之间的数字')),
+                );
+                return;
               }
+
+              Navigator.pop(context, {
+                'name': name,
+                'address': address,
+                'port': port.toString(),
+              });
             },
-            child: const Text("添加"),
+
+            child: const Text("添加", style: TextStyle(color: Colors.black)),
           ),
         ],
       );

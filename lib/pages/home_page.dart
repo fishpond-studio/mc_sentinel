@@ -83,11 +83,11 @@ class _HomepageState extends State<Homepage>
             icon: const Icon(Icons.cached, size: 20),
           ),
         ],
-        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.15),
+        backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.15),
       ),
 
       body: Container(
-        color: Theme.of(context).primaryColor.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
         child: GridView.builder(
           padding: const EdgeInsets.all(12),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -112,7 +112,10 @@ class _HomepageState extends State<Homepage>
         focusElevation: 2,
         hoverElevation: 2,
         onPressed: _showAddDialog,
-        child: const Icon(Icons.add, size: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25), // 圆角大小
+        ),
+        child: const Icon(Icons.add, size: 30, color: Colors.white),
       ),
     );
   }
