@@ -51,16 +51,7 @@ class ServerCard extends StatelessWidget {
                 //信息显示
                 Expanded(
                   flex: 13,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.6), //低明度
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ServerInfo(
-                      host: item['address'],
-                      port: item['port'],
-                    ),
-                  ),
+                  child: ServerInfo(host: item['address'], port: item['port']),
                 ),
                 const SizedBox(height: 9), // 底部栏上方间隔
                 //组件底部显示状态栏
