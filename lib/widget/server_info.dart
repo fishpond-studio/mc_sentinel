@@ -43,14 +43,14 @@ class _ServerInfoState extends State<ServerInfo> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
               //服务器版本
-              Container(child: Text('version')),
+              Container(child: Text('${info?['version']?['name']}')),
 
               //服务器介绍
-              Container(child: Text('description')),
+              Container(child: Text('${info?['description']}')),
 
               //服务器人数(进度条)
               Container(child: Text('players')),
