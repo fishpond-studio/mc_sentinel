@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:is_mc_fk_running/widget/edit_server_dialog.dart';
 import 'package:is_mc_fk_running/widget/server_info.dart';
+import 'package:is_mc_fk_running/widget/server_info_controller.dart';
 
-class ServerCard extends StatelessWidget {
+class ServerCard extends StatefulWidget {
   final Map<String, String> item;
   final VoidCallback onDelete;
   final ValueChanged<Map<String, String>> onEdit;
+  final ServerInfoController controller;
 
   const ServerCard({
     super.key,
     required this.item,
     required this.onDelete,
     required this.onEdit,
+    required this.controller,
   });
 
+  @override
+  State<ServerCard> createState() => _ServerCardState();
+}
+
+class _ServerCardState extends State<ServerCard> {
   Future<void> _showEditDialog(
     BuildContext context,
     Map<String, String> item,
@@ -22,14 +30,14 @@ class ServerCard extends StatelessWidget {
 
     final result = await showEditServerDialog(context, item);
     if (result == null) return;
-    onEdit(result);
+    widget.onEdit(result);
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = item['name'] ?? '';
-    final address = item['address'] ?? '';
-    final port = item['port'] ?? '';
+    final name = widget.item['name'] ?? '';
+    final address = widget.item['address'] ?? '';
+    final port = widget.item['port'] ?? '';
 
     return SizedBox(
       height: 250,
@@ -73,7 +81,11 @@ class ServerCard extends StatelessWidget {
                 //信息显示
                 Expanded(
                   flex: 13,
-                  child: ServerInfo(host: address, port: port),
+                  child: ServerInfo(
+                    host: address,
+                    port: port,
+                    controller: widget.controller,
+                  ),
                 ),
                 const SizedBox(height: 9), // 底部栏上方间隔
                 //组件底部显示状态栏
@@ -106,7 +118,8 @@ class ServerCard extends StatelessWidget {
                                     );
                                   }),
                             ),
-                            onPressed: () => _showEditDialog(context, item),
+                            onPressed: () =>
+                                _showEditDialog(context, widget.item),
                             child: Icon(
                               Icons.settings,
                               color: Colors.white,
@@ -202,7 +215,7 @@ class ServerCard extends StatelessWidget {
                                   return AlertDialog(
                                     title: const Text("确认删除"),
                                     content: Text(
-                                      "确定要删除服务器 ${item['name']} 吗？",
+                                      "确定要删除服务器 ${widget.item['name']} 吗？",
                                     ),
                                     actions: [
                                       TextButton(
@@ -212,7 +225,7 @@ class ServerCard extends StatelessWidget {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context); //删除之后取消对话框
-                                          onDelete();
+                                          widget.onDelete();
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.red[300]

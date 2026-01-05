@@ -3,41 +3,65 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:is_mc_fk_running/services/minecraft_server_status.dart';
+import 'package:is_mc_fk_running/widget/server_info_controller.dart';
 
 class ServerInfo extends StatefulWidget {
   final String host;
   final String port;
+  final ServerInfoController controller;
 
-  const ServerInfo({super.key, required this.host, required this.port});
+  const ServerInfo({
+    super.key,
+    required this.host,
+    required this.port,
+    required this.controller,
+  });
 
   @override
-  State<ServerInfo> createState() => _ServerInfoState();
+  State<ServerInfo> createState() => ServerInfoState();
 }
 
-class _ServerInfoState extends State<ServerInfo> {
+class ServerInfoState extends State<ServerInfo> {
   late MinecraftServerStatus server;
   Map? info;
 
   @override
   void initState() {
     super.initState();
+    _initServer();
+    widget.controller.refresh = loadServerInfo;
+  }
+
+  void _initServer() {
     server = MinecraftServerStatus(
       host: widget.host,
       port: int.parse(widget.port),
     );
-    _loadServerInfo();
+    loadServerInfo();
   }
 
-  Future<void> _loadServerInfo() async {
+  @override
+  void didUpdateWidget(covariant ServerInfo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.host != widget.host || oldWidget.port != widget.port) {
+      _initServer();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.refresh = null;
+    super.dispose();
+  }
+
+  Future<void> loadServerInfo() async {
     try {
       final data = await server.getServerStatus();
-      setState(() {
-        info = data;
-      });
+      if (!mounted) return;
+      setState(() => info = data);
     } catch (e) {
-      setState(() {
-        info = {'online': false, 'error': e.toString()};
-      });
+      if (!mounted) return;
+      setState(() => info = {'online': false, 'error': e.toString()});
     }
   }
 
