@@ -34,7 +34,7 @@ class _HomepageState extends State<Homepage>
 
   // 更新日期方法
 
-  void _addItem(Map<String, dynamic> item) {
+  void _addItem(Map<String, String> item) {
     setState(() {
       db.items.add(item);
     });
@@ -48,12 +48,18 @@ class _HomepageState extends State<Homepage>
     db.updateDataBase();
   }
 
+  void _editItem(int index, Map<String, String> item) {
+    setState(() {
+      db.items[index] = item;
+    });
+  }
+
   /// 弹出输入框
   Future<void> _showAddDialog() async {
     // 弹出对话框 等待输入
     final result = await showAddServerDialog(context);
     if (result != null) {
-      _addItem({...result, 'running': false});
+      _addItem({...result});
     }
   }
 
@@ -90,6 +96,7 @@ class _HomepageState extends State<Homepage>
             return ServerCard(
               item: db.items[index],
               onDelete: () => _removeItem(index),
+              onEdit: (item) => _editItem(index, item),
             );
           },
         ),
