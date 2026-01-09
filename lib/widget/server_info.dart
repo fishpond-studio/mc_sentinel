@@ -92,7 +92,11 @@ class ServerInfoState extends State<ServerInfo> {
               child: Column(
                 children: [
                   //服务器版本
-                  Container(child: Text('${info?['version']?['name']}')),
+                  Expanded(
+                    child: Container(
+                      child: Text('${info?['version']?['name']}'),
+                    ),
+                  ),
 
                   //world name
                   Expanded(
@@ -101,7 +105,7 @@ class ServerInfoState extends State<ServerInfo> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: Text(
-                          info?['world_name'] ?? 'N/A',
+                          info?['description'] ?? 'N/A',
                           overflow: TextOverflow.visible,
                           softWrap: false,
                           style: TextStyle(fontSize: 200),
