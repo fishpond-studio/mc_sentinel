@@ -32,7 +32,7 @@ Future<Map<String, dynamic>?> showAddServerDialog(
               initialValue: inputName,
               autofocus: !isEditing,
               decoration: InputDecoration(
-                labelText: l10n.nameLabel,
+                labelText: '${l10n.nameLabel}(Server)',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -82,9 +82,7 @@ Future<Map<String, dynamic>?> showAddServerDialog(
                   builder: (context) {
                     return AlertDialog(
                       title: Text(l10n.delete),
-                      content: Text(
-                        l10n.confirmDeleteServer(inputName),
-                      ),
+                      content: Text(l10n.confirmDeleteServer(inputName)),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
@@ -93,17 +91,18 @@ Future<Map<String, dynamic>?> showAddServerDialog(
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context); // 关闭确认对话框
-                            Navigator.pop(context, {'delete': true}); // 关闭编辑对话框并传递删除操作
+                            Navigator.pop(context, {
+                              'delete': true,
+                            }); // 关闭编辑对话框并传递删除操作
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red[300]
-                                ?.withValues(alpha: 0.9),
+                            backgroundColor: Colors.red[300]?.withValues(
+                              alpha: 0.9,
+                            ),
                           ),
                           child: Text(
                             l10n.delete,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
@@ -112,7 +111,10 @@ Future<Map<String, dynamic>?> showAddServerDialog(
                 );
               },
               icon: const Icon(Icons.delete_outline, color: Colors.red),
-              label: Text(l10n.delete, style: const TextStyle(color: Colors.red)),
+              label: Text(
+                l10n.delete,
+                style: const TextStyle(color: Colors.red),
+              ),
             ),
           TextButton(
             onPressed: () => Navigator.pop(context, null), // 取消
@@ -146,9 +148,9 @@ Future<Map<String, dynamic>?> showAddServerDialog(
               }
 
               if (port == null || port < 1 || port > 65535) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.invalidPort)),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(l10n.invalidPort)));
                 return;
               }
 
