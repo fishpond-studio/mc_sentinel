@@ -22,21 +22,25 @@ class ServerCard extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
-                    Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+                    Theme.of(
+                      context,
+                    ).colorScheme.surface.withValues(alpha: 0.8),
+                    Theme.of(
+                      context,
+                    ).colorScheme.surface.withValues(alpha: 0.5),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.outline.withValues(alpha: 0.2),
                   width: 1,
                 ),
                 //边框效果
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(
-                      context,
-                    ).shadowColor.withValues(alpha: 0.1),
+                    color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
                     blurRadius: 16,
                     offset: Offset(0, 8),
                   ),
@@ -55,7 +59,10 @@ class ServerCard extends StatelessWidget {
                   flex: 13,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surfaceContainerHighest
+                          .withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: ClipRRect(
@@ -77,30 +84,38 @@ class ServerCard extends StatelessWidget {
                       //运行状态
                       _buildActionButton(
                         context,
-                        icon: item['running'] ? Icons.power_settings_new : Icons.play_arrow_rounded,
+                        icon: item['running']
+                            ? Icons.power_settings_new
+                            : Icons.play_arrow_rounded,
                         color: item['running'] ? Colors.green : Colors.orange,
                         // 切换运行状态按钮
                         onTap: () {
-                           // TODO: 实现切换运行状态功能
+                          // TODO: 实现切换运行状态功能
                         },
                       ),
-                      
+
                       // Server名称
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surface.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.1),
                             ),
                           ),
                           child: Center(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                              ),
                               child: Text(
-                                item['name'],
+                                'name',
                                 overflow: TextOverflow.visible,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -112,7 +127,7 @@ class ServerCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      
+
                       //编辑按钮
                       _buildActionButton(
                         context,
@@ -131,7 +146,12 @@ class ServerCard extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(BuildContext context, {required IconData icon, required Color color, required VoidCallback onTap}) {
+  Widget _buildActionButton(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return AspectRatio(
       aspectRatio: 1,
       child: Material(
@@ -140,11 +160,7 @@ class ServerCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: onTap,
-          child: Icon(
-            icon,
-            color: color,
-            size: 20,
-          ),
+          child: Icon(icon, color: color, size: 20),
         ),
       ),
     );

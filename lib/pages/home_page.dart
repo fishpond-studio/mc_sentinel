@@ -33,9 +33,7 @@ class _HomepageState extends State<Homepage>
     super.initState();
   }
 
-  // 更新日期方法
-
-  void _addItem(Map<String, dynamic> item) {
+  void _addItem(Map<String, String> item) {
     setState(() {
       db.items.add(item);
     });
@@ -49,7 +47,7 @@ class _HomepageState extends State<Homepage>
     db.updateDataBase();
   }
 
-  void _updateItem(int index, Map<String, dynamic> newItem) {
+  void _updateItem(int index, Map<String, String> newItem) {
     setState(() {
       db.items[index] = newItem;
     });
@@ -61,7 +59,7 @@ class _HomepageState extends State<Homepage>
     // 弹出对话框 等待输入
     final result = await showAddServerDialog(context);
     if (result != null) {
-      _addItem({...result, 'running': false});
+      _addItem({...result});
     }
   }
 
@@ -97,6 +95,7 @@ class _HomepageState extends State<Homepage>
         ),
         actions: [
           // IconButton(onPressed: null, icon: const Icon(Icons.cached, size: 20)),
+          IconButton(onPressed: null, icon: const Icon(Icons.cached, size: 20)),
         ],
         backgroundColor: Colors.transparent, // Transparent to show gradient
       ),
@@ -108,30 +107,33 @@ class _HomepageState extends State<Homepage>
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).colorScheme.surface,
-              Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+              Theme.of(
+                context,
+              ).colorScheme.primaryContainer.withValues(alpha: 0.3),
               Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             ],
           ),
         ),
-        child: SafeArea( // Use SafeArea to avoid overlap with system UI
+        child: SafeArea(
+          // Use SafeArea to avoid overlap with system UI
           child: GridView.builder(
             padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 每行两列
-            crossAxisSpacing: 16, // 列间距
-            mainAxisSpacing: 16, // 行间距
-            childAspectRatio: 0.75, // 宽高比，根据 ServerCard 调整
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // 每行两列
+              crossAxisSpacing: 16, // 列间距
+              mainAxisSpacing: 16, // 行间距
+              childAspectRatio: 0.75, // 宽高比，根据 ServerCard 调整
+            ),
+            itemCount: db.items.length,
+            itemBuilder: (context, index) {
+              return ServerCard(
+                item: db.items[index],
+                onEdit: () => _showEditDialog(index, db.items[index]),
+              );
+            },
           ),
-          itemCount: db.items.length,
-          itemBuilder: (context, index) {
-            return ServerCard(
-              item: db.items[index],
-              onEdit: () => _showEditDialog(index, db.items[index]),
-            );
-          },
         ),
       ),
-    ),
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,

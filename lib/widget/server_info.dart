@@ -10,10 +10,10 @@ class ServerInfo extends StatefulWidget {
   const ServerInfo({super.key, required this.host, required this.port});
 
   @override
-  State<ServerInfo> createState() => _ServerInfoState();
+  State<ServerInfo> createState() => ServerInfoState();
 }
 
-class _ServerInfoState extends State<ServerInfo> {
+class ServerInfoState extends State<ServerInfo> {
   late MinecraftServerStatus server;
   Map? info;
   DateTime? lastUpdated;
@@ -21,19 +21,37 @@ class _ServerInfoState extends State<ServerInfo> {
   @override
   void initState() {
     super.initState();
+    _initServer();
+  }
+
+  void _initServer() {
     server = MinecraftServerStatus(
       host: widget.host,
       port: int.parse(widget.port),
     );
-    _loadServerInfo();
+    loadServerInfo();
   }
 
-  Future<void> _loadServerInfo() async {
+  @override
+  void didUpdateWidget(covariant ServerInfo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.host != widget.host || oldWidget.port != widget.port) {
+      _initServer();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> loadServerInfo() async {
     try {
       info = await server.getServerStatus();
       lastUpdated = DateTime.now();
     } catch (e) {
-      info = {'online': false, 'error': e.toString()};
+      if (!mounted) return;
+      setState(() => info = {'online': false, 'error': e.toString()});
     }
     if (mounted) {
       setState(() {});
@@ -60,7 +78,11 @@ class _ServerInfoState extends State<ServerInfo> {
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.dns, size: 20, color: theme.colorScheme.primary),
+                child: Icon(
+                  Icons.dns,
+                  size: 20,
+                  color: theme.colorScheme.primary,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -165,7 +187,8 @@ class _ServerInfoState extends State<ServerInfo> {
                           value: online / max,
                           minHeight: 6,
                           borderRadius: BorderRadius.circular(3),
-                          backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             online / max > 0.9 ? Colors.red : Colors.green,
                           ),
