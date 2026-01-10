@@ -109,7 +109,7 @@ class _ServerDetailPageState extends State<ServerDetailPage> {
                   unit: l10n.players,
                   maxY: 70,
                 ),
-
+                const SizedBox(height: 24),
                 // 延迟折线图
                 _buildChartCard(
                   context,

@@ -21,7 +21,6 @@ class ServerCard extends StatelessWidget {
         );
       },
       child: SizedBox(
-        height: 250,
         child: Stack(
           children: [
             Positioned.fill(
