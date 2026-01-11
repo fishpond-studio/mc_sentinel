@@ -158,6 +158,39 @@ class _HomepageState extends State<Homepage>
     await Future.delayed(const Duration(milliseconds: 500));
   }
 
+  Widget _buildModernRefreshButton(
+    ColorScheme colorScheme,
+    AppLocalizations l10n,
+  ) {
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: _handleRefresh,
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: colorScheme.primary.withValues(alpha: 0.2),
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              Icons.refresh_rounded,
+              size: 20,
+              color: colorScheme.primary,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -167,36 +200,87 @@ class _HomepageState extends State<Homepage>
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AppBar(
-              centerTitle: true,
-              elevation: 0,
-              title: Text(
-                l10n.servers,
-                style: TextStyle(
-                  fontFamily: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.fontFamily,
-                  fontWeight: FontWeight.w900, // Extra bold for readability
-                  fontSize: 26,
-                  color: colorScheme
-                      .onSurface, // Use onSurface for better contrast
-                  letterSpacing: 1.5,
+        preferredSize: const Size.fromHeight(120), // 增加高度以容纳 SafeArea
+        child: SafeArea(
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+            height: 60,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colorScheme.surface.withValues(alpha: 0.8),
+                        colorScheme.surfaceContainerHighest.withValues(
+                          alpha: 0.6,
+                        ),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: colorScheme.outline.withValues(alpha: 0.15),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // 左侧装饰点
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: colorScheme.primary.withValues(
+                                  alpha: 0.5,
+                                ),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // 标题
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              l10n.servers,
+                              style: TextStyle(
+                                fontFamily: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.fontFamily,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                                color: colorScheme.onSurface,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // 刷新按钮
+                        _buildModernRefreshButton(colorScheme, l10n),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              actions: [
-                IconButton(
-                  onPressed: _handleRefresh,
-                  icon: const Icon(Icons.refresh_rounded, size: 24),
-                  tooltip: l10n
-                      .refresh, // Make sure to add this in l10n if not exists
-                ),
-                const SizedBox(width: 8),
-              ],
-              backgroundColor: colorScheme.surface.withValues(alpha: 0.7),
             ),
           ),
         ),
@@ -239,8 +323,8 @@ class _HomepageState extends State<Homepage>
                 20,
                 16,
                 20,
-                80,
-              ), // Enough to see items under the bar
+                110, // 增加底部间距，为浮动导航栏留出空间
+              ),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 500,
                 mainAxisSpacing: 20,
@@ -259,7 +343,7 @@ class _HomepageState extends State<Homepage>
         ],
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
+        padding: const EdgeInsets.only(bottom: 110),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),

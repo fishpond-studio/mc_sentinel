@@ -41,23 +41,54 @@ class _PictureChangeState extends State<PictureChange> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AppBar(
-              centerTitle: true,
-              elevation: 0,
-              title: Text(
-                l10n.settings,
-                style: TextStyle(
-                  fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 26,
-                  color: theme.colorScheme.onSurface,
+        preferredSize: const Size.fromHeight(120), // 增加高度以容纳 SafeArea
+        child: SafeArea(
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+            height: 60,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        theme.colorScheme.surface.withValues(alpha: 0.8),
+                        theme.colorScheme.surfaceContainerHighest.withValues(
+                          alpha: 0.6,
+                        ),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: theme.colorScheme.outline.withValues(alpha: 0.15),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.colorScheme.shadow.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      l10n.settings,
+                      style: TextStyle(
+                        fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 20,
+                        color: theme.colorScheme.onSurface,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.7),
             ),
           ),
         ),
@@ -517,7 +548,7 @@ class _PictureChangeState extends State<PictureChange> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 100), // Space for glass bar
+                const SizedBox(height: 110), // 为浮动导航栏预留空间
               ],
             ),
           ),

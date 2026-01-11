@@ -2,19 +2,20 @@ class VarInt {
   static const int varintFix = 0x80;
 
   static List<int> encode(int value) {
-    assert(
-      value >= -2147483648 && value <= 2147483647,
-      'Value must be a 32-bit signed integer',
-    );
+    // Ensure it's treated as a 32-bit signed integer first
+    value = value.toSigned(32);
 
     final bytes = <int>[];
 
-    while (value >= varintFix) {
-      bytes.add((value & 0x7F) | varintFix);
-      value >>= 7;
+    // Use an unsigned representation for the bit manipulation
+    int uValue = value & 0xFFFFFFFF;
+
+    while (uValue >= 0x80) {
+      bytes.add((uValue & 0x7F) | 0x80);
+      uValue >>>= 7; // Use logical shift
     }
 
-    bytes.add(value & 0x7F);
+    bytes.add(uValue & 0x7F);
     return bytes;
   }
 

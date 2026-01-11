@@ -4,6 +4,7 @@ import 'package:is_mc_fk_running/l10n/app_localizations.dart';
 import 'package:is_mc_fk_running/services/minecraft_server_status.dart';
 import 'package:hive/hive.dart';
 import 'dart:ui';
+import 'dart:async';
 
 class ServerDetailPage extends StatefulWidget {
   final Map<String, dynamic> serverItem;
@@ -18,15 +19,32 @@ class _ServerDetailPageState extends State<ServerDetailPage> {
   late MinecraftServerStatus _serverService;
   Map<String, dynamic>? _currentStatus;
   bool _isLoading = true;
+  Timer? _refreshTimer;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _serverService = MinecraftServerStatus(
-      host: widget.serverItem['address'],
-      port: int.parse(widget.serverItem['port'].toString()),
-    );
+    _initServer();
+    // 启动定期刷新 (每 60 秒一次)
+    _refreshTimer = Timer.periodic(const Duration(seconds: 60), (_) {
+      _fetchStatus();
+    });
+  }
+
+  void _initServer() {
+    final address = widget.serverItem['address']?.toString().trim() ?? '';
+    final portStr = widget.serverItem['port']?.toString().trim() ?? '25565';
+    final port = int.tryParse(portStr) ?? 25565;
+
+    _serverService = MinecraftServerStatus(host: address, port: port);
     _fetchStatus();
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _fetchStatus() async {
@@ -36,6 +54,7 @@ class _ServerDetailPageState extends State<ServerDetailPage> {
         setState(() {
           _currentStatus = status;
           _isLoading = false;
+          _errorMessage = null;
         });
       }
     } catch (e) {
@@ -43,6 +62,7 @@ class _ServerDetailPageState extends State<ServerDetailPage> {
         setState(() {
           _currentStatus = {'online': false};
           _isLoading = false;
+          _errorMessage = e.toString();
         });
       }
     }
@@ -295,6 +315,17 @@ class _ServerDetailPageState extends State<ServerDetailPage> {
                 ? Colors.green
                 : Colors.red,
           ),
+          if (_errorMessage != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              _errorMessage!,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red.withValues(alpha: 0.7),
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
         ],
       ),
     );

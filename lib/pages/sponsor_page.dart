@@ -61,7 +61,6 @@ class _SponsorPageState extends State<SponsorPage> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: AppBar(
-              centerTitle: true,
               elevation: 0,
               title: Text(
                 l10n.sponsor,

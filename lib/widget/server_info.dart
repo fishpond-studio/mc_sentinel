@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:is_mc_fk_running/l10n/app_localizations.dart';
 import 'package:is_mc_fk_running/services/minecraft_server_status.dart';
@@ -16,19 +17,30 @@ class ServerInfoState extends State<ServerInfo> {
   late MinecraftServerStatus server;
   Map? info;
   DateTime? lastUpdated;
+  Timer? _refreshTimer;
 
   @override
   void initState() {
     super.initState();
     _initServer();
+    // 启动定期刷新 (每 60 秒一次)
+    _refreshTimer = Timer.periodic(const Duration(seconds: 60), (_) {
+      loadServerInfo();
+    });
   }
 
   void _initServer() {
-    server = MinecraftServerStatus(
-      host: widget.host,
-      port: int.parse(widget.port),
-    );
+    final host = widget.host.trim();
+    final port = int.tryParse(widget.port.trim()) ?? 25565;
+
+    server = MinecraftServerStatus(host: host, port: port);
     loadServerInfo();
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
   }
 
   @override
