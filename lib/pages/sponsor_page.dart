@@ -55,7 +55,6 @@ class SponsorPage extends StatelessWidget {
                 Text(
                   l10n.joinCommunity,
                   style: TextStyle(
-                    fontFamily: 'FMinecraft',
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
@@ -82,7 +81,7 @@ class SponsorPage extends StatelessWidget {
                     theme,
                     l10n,
                     title: 'QQ群(是朋友的群聊呀)', //卡片标题
-                    name: 'Furcraft', //群聊名称
+                    name: 'FurCraft', //群聊名称
                     id: '981957765', //QQ频道链接
                     icon: Icons.chat_bubble_outline, //图标
                     qrImagePath: 'lib/images/QR_code_2.png', //二维码图片路径
@@ -170,7 +169,6 @@ class SponsorPage extends StatelessWidget {
                     child: Text(
                       l10n.sponsorTitle,
                       style: TextStyle(
-                        fontFamily: 'FMinecraft',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,

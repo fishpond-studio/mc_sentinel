@@ -175,6 +175,81 @@ class _PictureChangeState extends State<PictureChange> {
                           ),
                         ),
                       ),
+
+                      _buildDivider(context),
+
+                      //更换字体
+                      _buildSettingItem(
+                        context,
+                        icon: Icons.font_download,
+                        label: l10n.changeFont,
+                        trailing: Transform.scale(
+                          scale: 0.9,
+                          child: Consumer<ThemeProvider>(
+                            builder: (context, themeProvider, child) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: themeProvider.currentFontFamily,
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      themeProvider.changeFontFamily(value);
+                                    }
+                                  },
+                                  items: themeProvider.availableFonts
+                                      .map<DropdownMenuItem<String>>((
+                                        String value,
+                                      ) {
+                                        String label;
+                                        switch (value) {
+                                          case 'System':
+                                            label = l10n.fontSystem;
+                                            break;
+                                          case 'FMinecraft':
+                                            label = l10n.fontMinecraft;
+                                            break;
+                                          case 'FJetBrainsMono':
+                                            label = l10n.fontJetBrainsMono;
+                                            break;
+                                          default:
+                                            label = value;
+                                        }
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(label),
+                                        );
+                                      })
+                                      .toList(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+
+                      _buildDivider(context),
+
+                      //更新时间
+                      _buildSettingItem(
+                        context,
+                        icon: Icons.update,
+                        label: l10n.updateTime,
+                        trailing: Transform.scale(
+                          scale: 0.9,
+                          child: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      ),
+                      _buildDivider(context),
+
+                      //更新保存时间
+                      _buildSettingItem(
+                        context,
+                        icon: Icons.save,
+                        label: l10n.updateSaveTime,
+                        trailing: Transform.scale(
+                          scale: 0.9,
+                          child: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -278,7 +353,6 @@ class _PictureChangeState extends State<PictureChange> {
                 Text(
                   label,
                   style: TextStyle(
-                    fontFamily: 'FMinecraft',
                     fontSize: 16,
                     color: theme.textTheme.bodyLarge?.color,
                   ),

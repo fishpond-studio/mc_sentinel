@@ -6,6 +6,7 @@ class ThemeProvider with ChangeNotifier {
   static const String _themeColorKey = 'themeColor';
   static const String _localeTagKey = 'localeTag';
   static const String _isDarkModeKey = 'isDarkMode';
+  static const String _fontFamilyKey = 'fontFamily';
 
   // 主题颜色映射
   final Map<String, Color> _colorMap = {
@@ -21,9 +22,17 @@ class ThemeProvider with ChangeNotifier {
     'Grey': const Color.fromARGB(210, 96, 125, 139),
   };
 
+  // 可用字体列表
+  final List<String> _availableFonts = [
+    'System',
+    'FMinecraft',
+    'FJetBrainsMono',
+  ];
+
   String _currentColorName = 'Blue';
   String? _localeTag;
   bool _isDarkMode = false;
+  String _currentFontFamily = 'FMinecraft';
 
   ThemeProvider() {
     // 从Hive加载保存的主题颜色
@@ -41,6 +50,12 @@ class ThemeProvider with ChangeNotifier {
     if (savedIsDarkMode is bool) {
       _isDarkMode = savedIsDarkMode;
     }
+
+    final savedFontFamily = _settingsBox.get(_fontFamilyKey);
+    if (savedFontFamily is String &&
+        _availableFonts.contains(savedFontFamily)) {
+      _currentFontFamily = savedFontFamily;
+    }
   }
 
   Color get currentColor => _colorMap[_currentColorName]!;
@@ -54,6 +69,10 @@ class ThemeProvider with ChangeNotifier {
   String get currentLocaleTag => _localeTag ?? 'system';
 
   bool get isDarkMode => _isDarkMode;
+
+  String get currentFontFamily => _currentFontFamily;
+
+  List<String> get availableFonts => _availableFonts;
 
   ThemeData get theme => getTheme();
 
@@ -83,9 +102,17 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeFontFamily(String fontFamily) {
+    if (_availableFonts.contains(fontFamily)) {
+      _currentFontFamily = fontFamily;
+      _settingsBox.put(_fontFamilyKey, fontFamily);
+      notifyListeners();
+    }
+  }
+
   ThemeData getTheme() {
     return ThemeData(
-      fontFamily: 'FMinecraft',
+      fontFamily: _currentFontFamily == 'System' ? null : _currentFontFamily,
       colorScheme: ColorScheme.fromSeed(
         seedColor: currentColor,
         brightness: _isDarkMode ? Brightness.dark : Brightness.light,

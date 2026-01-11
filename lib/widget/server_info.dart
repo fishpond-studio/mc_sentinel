@@ -17,6 +17,7 @@ class ServerInfoState extends State<ServerInfo> {
   late MinecraftServerStatus server;
   Map? info;
   DateTime? lastUpdated;
+  DateTime? updateSaveTime;
 
   @override
   void initState() {
